@@ -3,13 +3,6 @@
   cpu 8086
   org 0x100
 start:
-readline:
-  xor cx, cx
-readchar:
-  mov ah, 1
-  int 0x21
-  test al, al
-  jz print
   sub al, '0'
   cmp al, 9
   ja .no
@@ -24,8 +17,12 @@ readchar:
   xchg ax, cx
   aad
   add bx, ax
-  jmp readline
-print:
+  xor cx, cx
+readchar:
+  mov ah, 1
+  int 0x21
+  test al, al
+  jnz start
   xchg bx, ax
   mov bx, 10
 .div:
