@@ -1,4 +1,4 @@
-# as p1.S -march=rv64gc -o p1.o && ld -s p1.o -o p1 && truncate -s 273 p1
+# as p1.S -march=rv64gc -o p1.o && ld -s p1.o -o p1 && truncate -s 267 p1
 # ./p1 < data/input.txt
 
 .global _start
@@ -37,14 +37,13 @@ div:
   addi s1, s1, 1
   div s0, s0, t0
   bne s0, x0, div
+  addi a7, a7, 64 - 63
 print:
   addi sp, sp, -1
   addi a0, x0, 1
   addi a1, sp, 0
-  addi a2, x0, 1
-  addi a7, x0, 64
   ecall
   addi s1, s1, -1
   bne s1, x0, print
-  addi a7, x0, 93
+  addi a7, a7, 93 - 64
   ecall
