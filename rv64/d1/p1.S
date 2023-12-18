@@ -13,7 +13,7 @@ readchar:
   addi a2, x0, 1
   addi a7, x0, 63
   ecall
-  beq a0, x0, div
+  beq a0, x0, extra
   ld a3, (sp)
   addi a3, a3, -'\n'
   beq a3, x0, add
@@ -33,9 +33,10 @@ div:
   rem a0, s0, t0
   add a0, a0, '0'
   sd a0, (a1)
-  addi a1, a1, 1
-  addi s1, s1, 1
   div s0, s0, t0
+extra:
+  addi s1, s1, 1
+  addi a1, a1, 1
   bne s0, x0, div
   addi a7, a7, 64 - 63
 print:
