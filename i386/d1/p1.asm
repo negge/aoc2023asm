@@ -20,26 +20,20 @@ phdr:                                                           ; elf32_phdr
 
 phdrsize      equ     $ - phdr + 4
 
-_start:       ; your program here (max 8 bytes)
+_start:       ; your program here (max 10 bytes)
               inc     edx                     ;   e_shoff       ;   p_align
               nop
 .readline:
               sub     al, '0'
               cmp     al, 9                   ;   e_flags
-              jmp     .skip
-              dw      ehdrsize                ;   e_ehsize
+              ja      .no
+              jmp     .skip                   ;   e_ehsize
               dw      phdrsize                ;   e_phentsize
               dw      1                       ;   e_phnum
               dw      0                       ;   e_shentsize
               dw      0                       ;   e_shnum
-              dw      0                       ;   e_shstrndx
-
-ehdrsize      equ     $ - ehdr
-
 .skip:
-              ja      .no
-
-              test    ch, ch
+              test    ch, ch                  ;   e_shstrndx
               jnz     .first
               mov     ch, al
 .first:
