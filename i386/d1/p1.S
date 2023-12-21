@@ -1,4 +1,4 @@
-# as -32 p1.S -o p1.o && ld -s -n -m elf_i386 p1.o -o p1 && truncate -s 262 p1
+# as -32 p1.S -o p1.o && ld -s -n -m elf_i386 p1.o -o p1 && truncate -s 260 p1
 # ./p1 < data/input.txt
 
 .global _start
@@ -7,16 +7,17 @@
 _start:
   inc edx
 .readline:
-  sub cl, '0'
-  cmp cl, 9
+  sub al, '0'
+  cmp al, 9
   ja .no
-  test ah, ah
+  test ch, ch
   jnz .first
-  mov ah, cl
+  mov ch, al
 .first:
-  mov al, cl
+  mov cl, al
 .no:
-  cmp cl, 10 - '0'
+  cmp al, 10 - '0'
+  xchg eax, ecx
   jnz .readchar
   aad
   add edi, eax
@@ -28,8 +29,8 @@ _start:
   pop eax
   int 0x80
   test eax, eax
-  mov ecx, [ecx]
-  pop eax
+  mov eax, [ecx]
+  pop ecx
   jnz .readline
   mov al, 10
   xchg eax, edi
