@@ -51,10 +51,10 @@ _start:       ; your program here (max 10 bytes)
               push    3
               pop     eax
               int     0x80
-              test    eax, eax
+              dec     eax
               mov     eax, [ecx]
               pop     ecx
-              jnz     .readline
+              jns     .readline
               mov     al, 10
               xchg    eax, edi
 .div:
