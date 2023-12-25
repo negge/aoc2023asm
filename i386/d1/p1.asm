@@ -58,7 +58,7 @@ _start:       ; your program here (max 10 bytes)
               mov     al, 10
               xchg    eax, edi
 .div:
-              xor     edx, edx
+              cdq
               div     edi
               add     dl, '0'
               push    edx
