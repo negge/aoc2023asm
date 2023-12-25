@@ -31,10 +31,9 @@ _start:       ; your program here (max 10 bytes)
               dw      phdrsize                ;   e_phentsize
               dw      1                       ;   e_phnum
               dw      0                       ;   e_shentsize
-              dw      0                       ;   e_shnum
 .skip:
-              test    ch, ch                  ;   e_shstrndx
-              jnz     .first
+              test    ch, ch                  ;   e_shnum
+              jnz     .first                  ;   e_shstrndx
               mov     ch, al
 .first:
               mov     cl, al
