@@ -49,7 +49,6 @@ phdrsize      equ     $ - phdr
               jnz     .readchar
               aad
               add     edi, eax
-              xor     eax, eax
 .readchar:
               mov     ecx, esp
               push    eax

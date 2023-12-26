@@ -1,4 +1,4 @@
-# as -32 p1.S -o p1.o && ld -s -n -m elf_i386 p1.o -o p1 && truncate -s 258 p1
+# as -32 p1.S -o p1.o && ld -s -n -m elf_i386 p1.o -o p1 && truncate -s 256 p1
 # ./p1 < data/input.txt
 
 .global _start
@@ -21,7 +21,6 @@ _start:
   jnz .readchar
   aad
   add edi, eax
-  xor eax, eax
 .readchar:
   mov ecx, esp
   push eax
