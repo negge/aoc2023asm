@@ -59,7 +59,6 @@ phdrsize      equ     $ - phdr
               mov     eax, [ecx]
               pop     ecx
               jns     .readline
-              mov     al, 10
               xchg    eax, edi
 .div:
               cdq
