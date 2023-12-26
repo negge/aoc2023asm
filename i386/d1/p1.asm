@@ -4,7 +4,7 @@
 bits 32
 cpu 386
 
-              org     0x00010000
+              org     0x058d0000
 
 ehdr:                                         ; elf32_hdr
               db      0x7F, "ELF"             ;   e_ident
@@ -14,26 +14,32 @@ phdr:                                                           ; elf32_phdr
               dd      $$                                        ;   p_vaddr
               dw      2                       ;   e_type        ;   p_paddr
               dw      3                       ;   e_machine
-              dd      _start                  ;   e_version     ;   p_filesz
-              dd      _start                  ;   e_entry       ;   p_memsz
-              dd      4                       ;   e_phoff       ;   p_flags
+              dd      .start                  ;   e_version     ;   p_filesz
+              dw      .start - $$             ;   e_entry       ;   p_memsz
+.print:
+              lea     eax, [dword 4]          ;   e_phoff       ;   p_flags
+              mov     ecx, esp                ;   e_shoff       ;   p_align
+              int     0x80
 
-phdrsize      equ     $ - phdr + 4
+phdrsize      equ     $ - phdr
 
-_start:       ; your program here (max 10 bytes)
-              inc     edx                     ;   e_shoff       ;   p_align
-              nop
-.readline:
-              sub     al, '0'
-              cmp     al, 9                   ;   e_flags
-              ja      .no
-              jmp     .skip                   ;   e_ehsize
+              pop     ecx                     ;   e_flags
+              dec     esi
+              jns     .print
+.exit:
+              int     0x80                    ;   e_ehsize
+
               dw      phdrsize                ;   e_phentsize
               dw      1                       ;   e_phnum
               dw      0                       ;   e_shentsize
-.skip:
-              test    ch, ch                  ;   e_shnum
-              jnz     .first                  ;   e_shstrndx
+.start:
+              inc     edx                     ;   e_shnum
+.readline:
+              sub     al, '0'                 ;   e_shstrndx
+              cmp     al, 9
+              ja      .no
+              test    ch, ch
+              jnz     .first
               mov     ch, al
 .first:
               mov     cl, al
@@ -66,14 +72,4 @@ _start:       ; your program here (max 10 bytes)
               jnz     .div
               inc     ebx
               mov     dl, 1
-.print:
-              mov     al, 4
-              mov     ecx, esp
-              int     0x80
-              pop     ecx
-              dec     esi
-              jns     .print
-.exit:
-              int     0x80
-
-filesize      equ     $ - $$
+              jmp     .print
